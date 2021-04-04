@@ -1,0 +1,3 @@
+rootProject.name = 'microservices-project'
+include 'post-service'
+include 'comment-service'
