@@ -56,3 +56,13 @@ configure(subprojects.findAll {
     }
     
 }
+
+configure(subprojects.findAll {
+    it.name != 'discovery'
+}) {
+
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    }
+
+}

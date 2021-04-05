@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8083/eureka
+
 spring:
   application:
     name: gateway
@@ -8,10 +13,10 @@ spring:
     gateway:
       routes:
         - id: commentServiceRoute
-          uri: http://localhost:8081/
+          uri: lb://comment-service
           predicates:
             - Path= /cs/**
         - id: postServiceRoute
-          uri: http://localhost:8082/
+          uri: lb://post-service
           predicates:
             - Path= /ps/**
