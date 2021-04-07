@@ -53,12 +53,12 @@ configure(subprojects.findAll {
         implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         runtimeOnly 'org.postgresql:postgresql'
+        implementation project(':common')
     }
-    
 }
 
 configure(subprojects.findAll {
-    it.name != 'discovery'
+    it.name != 'discovery' && it.name != 'common'
 }) {
 
     dependencies {

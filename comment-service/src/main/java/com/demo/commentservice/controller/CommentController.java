@@ -21,4 +21,9 @@ public class CommentController {
     public ResponseEntity<List<Comment>> findAll() {
         return ResponseEntity.ok(commentService.findAll());
     }
+
+    @GetMapping(value = "/interact")
+    public ResponseEntity<String> testInteraction() {
+        return ResponseEntity.ok("message from comments-service");
+    }
 }
