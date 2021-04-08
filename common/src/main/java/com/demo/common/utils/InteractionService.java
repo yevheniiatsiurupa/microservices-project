@@ -5,7 +5,6 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class InteractionService {
 
     private final DiscoveryClient discoveryClient;
+    private final RestTemplate httpRestTemplate;
 
     public  <T> ResponseEntity<T> execute(ServiceInfo serviceInfo,
                                           String pathToConcreteEndpoint,
@@ -27,7 +27,6 @@ public class InteractionService {
                 .concat(serviceInfo.getUrl())
                 .concat(pathToConcreteEndpoint);
 
-        RestTemplate restTemplate = new RestTemplate(new HttpComponentsClientHttpRequestFactory());
-        return restTemplate.exchange(url, method, new HttpEntity<>(body), zClass);
+        return httpRestTemplate.exchange(url, method, new HttpEntity<>(body), zClass);
     }
 }
