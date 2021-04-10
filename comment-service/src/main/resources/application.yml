@@ -3,14 +3,13 @@ server:
   servlet:
     context-path: /cs
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8083/eureka
-
 spring:
   application:
     name: comment-service
+
+  profiles:
+    active: local
+
   jpa:
     generate-ddl: true
     hibernate:
@@ -19,6 +18,13 @@ spring:
     properties.hibernate:
       dialect: org.hibernate.dialect.PostgreSQLDialect
 
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "local"
+
   datasource:
     url: jdbc:postgresql://localhost:5432/microservices-project-db
     username: postgres
@@ -26,3 +32,28 @@ spring:
 
   zipkin:
     base-url: http://localhost:9411/
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8083/eureka
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "docker"
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/microservices-project-db
+    username: postgres
+    password: password
+
+  zipkin:
+    base-url: http://zipkin:9411/
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8083/eureka

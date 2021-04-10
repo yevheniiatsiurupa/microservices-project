@@ -1,9 +1,9 @@
-jar {
-    enabled = true
+bootJar {
+    enabled = false
 }
 
-bootJar {
-    classifier = 'boot'
+jar {
+    enabled = true
 }
 
 dependencies {

@@ -1,0 +1,62 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      - LC_ALL=C.UTF-8
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=microservices-project-db
+
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+
+  discovery:
+    build: ./discovery
+    ports:
+      - "8083:8083"
+      - "6063:6063"
+    restart: always
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:8080"
+      - "6060:6060"
+    restart: always
+    depends_on:
+      - discovery
+      - postgres
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  comment-service:
+    build: ./comment-service
+    ports:
+      - "8081:8081"
+      - "6061:6061"
+    restart: always
+    depends_on:
+      - discovery
+      - postgres
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+
+  post-service:
+    build: ./post-service
+    ports:
+      - "8082:8082"
+      - "6062:6062"
+    restart: always
+    depends_on:
+      - discovery
+      - postgres
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"

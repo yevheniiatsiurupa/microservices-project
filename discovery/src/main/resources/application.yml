@@ -1,12 +1,38 @@
+server:
+  port: 8083
+
 spring:
+  profiles:
+    active: local
+
   application:
     name: discovery
 
-server:
-  port: 8083
 eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
-    service-url:
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "local"
+
+eureka:
+  client:
+    serviceUrl:
       defaultZone: http://localhost:8083/eureka
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "docker"
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:8083/eureka
