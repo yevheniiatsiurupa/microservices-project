@@ -30,6 +30,7 @@ subprojects {
     dependencies {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.6'
     }
 
     dependencyManagement {
