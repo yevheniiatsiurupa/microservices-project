@@ -20,6 +20,14 @@ spring:
           predicates:
             - Path= /ps/**
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 769888330185-go7cocbakom2gands6vm3rkqpicmj0ff.apps.googleusercontent.com
+            client-secret: M0bEXZSW0_FH2U3dEakLBNog
+
 ---
 
 spring:
