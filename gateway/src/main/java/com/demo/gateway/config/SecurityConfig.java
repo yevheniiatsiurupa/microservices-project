@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+import org.springframework.web.server.session.WebSessionManager;
+import reactor.core.publisher.Mono;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -14,10 +14,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http.authorizeExchange(exchanges -> exchanges.anyExchange().authenticated())
-                .oauth2Login(withDefaults());
+        http.authorizeExchange()
+                .pathMatchers("/au/**").permitAll()
+                //TODO change for token check
+                .pathMatchers("/home").permitAll()
+                .anyExchange().authenticated();
         http.csrf().disable();
         return http.build();
+    }
+
+    @Bean
+    public WebSessionManager webSessionManager() {
+        // Emulate SessionCreationPolicy.STATELESS
+        return exchange -> Mono.empty();
     }
 
 }

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +32,8 @@ public class PostController {
     }
 
     @GetMapping(value = "/interact")
-    public ResponseEntity<String> testInteraction(HttpServletRequest request) {
+    public ResponseEntity<String> testInteraction(HttpServletRequest request,
+                                                  @AuthenticationPrincipal OAuth2User user) {
         log.info("Before request to comment");
         ResponseEntity<String> response = interactionService.execute(
                 ServiceInfo.COMMENT_SERVICE, "/comments/interact", HttpMethod.GET, request, null, String.class);

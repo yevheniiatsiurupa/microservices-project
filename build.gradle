@@ -45,7 +45,7 @@ subprojects {
 }
 
 configure(subprojects.findAll {
-    it.name == 'comment-service' || it.name == 'post-service'
+    it.name == 'comment-service' || it.name == 'post-service' || it.name == 'auth-service'
 }) {
 
     dependencies {

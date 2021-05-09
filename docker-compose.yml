@@ -60,3 +60,15 @@ services:
       - postgres
     environment:
       - "SPRING_PROFILES_ACTIVE=docker"
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8084:8084"
+      - "6064:6064"
+    restart: always
+    depends_on:
+      - discovery
+      - postgres
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
