@@ -2,8 +2,9 @@ package com.demo.authservice.config;
 
 import com.demo.authservice.entity.User;
 import com.demo.authservice.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -18,12 +19,14 @@ import java.util.Map;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    private String homeUrl = "http://localhost:8080/home";
+    @Value("${app.home-url}")
+    private String homeUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -36,7 +39,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map attributes = oidcUser.getAttributes();
         String email = (String) attributes.get("email");
         User user = userRepository.findByEmail(email);
-        String token = JwtTokenUtil.generateToken(user);
+        String token = jwtTokenUtil.generateToken(user);
         String redirectionUrl = UriComponentsBuilder.fromUriString(homeUrl)
                 .queryParam("auth_token", token)
                 .build().toUriString();

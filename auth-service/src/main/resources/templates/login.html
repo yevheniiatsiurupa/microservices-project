@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <script th:inline="javascript">
+        function getToken(){
+            var _csrf_token = [[${_csrf.token}]] ;
+            var _csrf_param_name = [[${_csrf.parameterName}]];
+            console.log(_csrf_token);
+            return _csrf_token;
+        }
+    </script>
+    <script>
+        function submitForm(form, event) {
+            event.preventDefault();
+
+            // collect the form data while iterating over the inputs
+            var data = {};
+            for (var i = 0, ii = form.length; i < ii; ++i) {
+                var input = form[i];
+                if (input.name) {
+                    data[input.name] = input.value;
+                }
+            }
+
+            // construct an HTTP request
+            var xhr = new XMLHttpRequest();
+            var url = form.action + "?_csrf=" + getToken();
+            xhr.open(form.method,url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('Accept', 'application/json');
+            // xhr.setRequestHeader('X-CSRF-TOKEN', getToken());
+
+            // send the collected data as JSON
+            xhr.send(JSON.stringify(data));
+
+            xhr.onloadend = function () {
+                // done
+            };
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>SignUp !</h1>
+    <div class="col-md-6">
+        <div class="row">
+            <p><a href="/au/oauth2/authorize/google"><img src="http://pngimg.com/uploads/google/google_PNG19635.png"
+                                                          style="height:60px"></a></p>
+        </div>
+        <div class="row">
+            <h4>OR</h4>
+            <div class="row">
+                <form action="/au/signup" method="post" onsubmit="submitForm(this, event)">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="string" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address:</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Password:</label>
+                        <input type="password" class="form-control" id="pwd" name="password">
+                    </div>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn-primary">Sign Up / Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

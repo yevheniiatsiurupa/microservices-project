@@ -26,6 +26,9 @@ public class User {
     private String imageUrl;
 
     @Column
+    private String password;
+
+    @Column
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
 

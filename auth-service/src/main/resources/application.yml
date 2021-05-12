@@ -25,7 +25,7 @@ spring:
           google:
             client-id: 769888330185-go7cocbakom2gands6vm3rkqpicmj0ff.apps.googleusercontent.com
             client-secret: M0bEXZSW0_FH2U3dEakLBNog
-            redirect-uri: http://localhost:8084/au/oauth2/callback/google
+            redirect-uri: http://localhost:8080/au/oauth2/callback/google
 
 logging:
   level:
@@ -35,6 +35,10 @@ logging:
         web.filter.CommonsRequestLoggingFilter: DEBUG
     com:
       demo: DEBUG
+
+app:
+  login-url: http://localhost:8080/au/custom-login
+  home-url: http://localhost:8080/home
 ---
 
 spring:
