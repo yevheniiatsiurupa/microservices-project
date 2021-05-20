@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -39,7 +42,11 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map attributes = oidcUser.getAttributes();
         String email = (String) attributes.get("email");
         User user = userRepository.findByEmail(email);
-        String token = jwtTokenUtil.generateToken(user);
+        List<String> authorities = oidcUser.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        String token = jwtTokenUtil.generateToken(user, authorities);
         String redirectionUrl = UriComponentsBuilder.fromUriString(homeUrl)
                 .queryParam("auth_token", token)
                 .build().toUriString();

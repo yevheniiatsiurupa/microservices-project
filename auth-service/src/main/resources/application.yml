@@ -38,7 +38,7 @@ logging:
 
 app:
   login-url: http://localhost:8080/au/custom-login
-  home-url: http://localhost:8080/home
+  home-url: http://localhost:8080/au/home
 ---
 
 spring:

@@ -14,12 +14,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-        http.authorizeExchange()
-                .pathMatchers("/au/**").permitAll()
-                //TODO change for token check
-                .pathMatchers("/home").permitAll()
-                .anyExchange().authenticated();
         http.csrf().disable();
+        http.authorizeExchange()
+                .anyExchange().permitAll();
         return http.build();
     }
 

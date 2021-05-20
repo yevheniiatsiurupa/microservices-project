@@ -15,22 +15,24 @@ spring:
           uri: lb://comment-service
           predicates:
             - Path= /cs/**
+          filters:
+            - AuthenticationCustomFilter
         - id: postServiceRoute
           uri: lb://post-service
           predicates:
             - Path= /ps/**
-        - id: authServiceRoute
+          filters:
+            - AuthenticationCustomFilter
+        - id: authServiceRouteAuthenticated
+          uri: lb://auth-service
+          predicates:
+            - Path= /au/home/**
+          filters:
+            - name: AuthenticationCustomFilter
+        - id: authServiceRouteWithoutFilter
           uri: lb://auth-service
           predicates:
             - Path= /au/**
-
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          google:
-#            client-id: 769888330185-go7cocbakom2gands6vm3rkqpicmj0ff.apps.googleusercontent.com
-#            client-secret: M0bEXZSW0_FH2U3dEakLBNog
 
 ---
 
@@ -39,10 +41,14 @@ spring:
     activate:
       on-profile: "local"
 
+  zipkin:
+    enabled: false
+
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8083/eureka
+
 
 ---
 

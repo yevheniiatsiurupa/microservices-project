@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -45,10 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(encoder());
     }
 
-    @Bean
-    public JwtAuthenticationFilter authenticationTokenFilterBean() {
-        return new JwtAuthenticationFilter();
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -57,7 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/signup").permitAll()
-                .antMatchers(HttpMethod.POST, "/test").permitAll()
+                .antMatchers(HttpMethod.POST, "/custom-login").permitAll()
+                .antMatchers(HttpMethod.GET, "/home").permitAll()
                 .antMatchers("/custom-login", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                     .and()
@@ -76,9 +72,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizationRequestRepository(customAuthorizationRequestRepository())
                     .and()
                 .successHandler(customAuthenticationSuccessHandler);
-
-        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-//        http.csrf().disable();
     }
 
     @Bean

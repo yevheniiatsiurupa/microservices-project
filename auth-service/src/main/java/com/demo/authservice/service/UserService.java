@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -22,7 +24,7 @@ public class UserService {
             String storedPassword = dbUser.getPassword();
             if (bcryptEncoder.matches(user.getPassword(), storedPassword)) {
                 user.setPassword(bcryptEncoder.encode(user.getPassword()));
-                return jwtTokenUtil.generateToken(user);
+                return jwtTokenUtil.generateToken(user, Collections.emptyList());
             } else {
                 throw new RuntimeException("Wrong password.");
             }
@@ -30,6 +32,6 @@ public class UserService {
         user.setPassword(bcryptEncoder.encode(user.getPassword()));
         user.setUserType(UserType.SIMPLE);
         userRepository.save(user);
-        return jwtTokenUtil.generateToken(user);
+        return jwtTokenUtil.generateToken(user, Collections.emptyList());
     }
 }
